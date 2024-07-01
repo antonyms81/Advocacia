@@ -72,7 +72,7 @@ namespace Advocacia.Controllers
             {
                 var result = await _service.BuscarPorNome(nome);
 
-                return View(listaCliente);
+                return View(result);
             }
             catch (Exception ex)
             {
