@@ -1,9 +1,12 @@
 ﻿@model Advocacia.Domain.Entities.Cliente
 @{
-    ViewData["Title"] = "Cadastro de Cliente";
+    ViewData["Title"] = "Editar Cliente";
 }
 
-<form asp-action="Index">
+<h1>Editar Cliente</h1>
+
+
+<form asp-action="Editar">
 
     <div class="row">
 
@@ -41,12 +44,13 @@
         </div>
     </div>
 
+    <input type="hidden" asp-for="DataCadastro" />
+   
     <div class="row">
         <div class="col-md-4">
             <div style="padding-top:20px;">
-                <button type="submit" name="TipoAcao" value="Cadastrar" class="btn btn-primary">Cadastrar</button>
+                <button type="submit" name="TipoAcao" value="Editar" class="btn btn-primary">Editar</button>
             </div>
         </div>
     </div>
-   
 </form>

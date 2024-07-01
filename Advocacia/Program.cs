@@ -1,7 +1,24 @@
+using Advocacia.Domain.Repositories;
+using Advocacia.Domain.Services;
+using Advocacia.Infra.Data.Context;
+using Advocacia.Infra.Data.Repositories;
+using Microsoft.EntityFrameworkCore;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+
+builder.Services.AddDbContext<AdvocaciaContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration["ConnectionStrings:DbAdvocacia"]);
+    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+});
+
+builder.Services.AddScoped(typeof(IBase<>), typeof(Base<>));
+builder.Services.AddScoped<IServiceCliente, ServiceCliente>();
 
 var app = builder.Build();
 

@@ -1,0 +1,71 @@
+﻿@model Advocacia.Domain.Entities.ListaCliente
+@{
+    ViewData["Title"] = "Lista de Clientes";
+}
+
+<form asp-action="Cliente">
+    <h4>FILTROS</h4>
+
+    <div class="row">
+       
+        <div class="col-md-3">
+            <label asp-for="Nome" class="control-label">Nome do Cliente</label>
+            <input asp-for="Nome" class="form-control" placeholder="Digite o Nome">
+        </div>
+
+        <div class="col-md-3">
+            <label asp-for="Documento" class="control-label">Documento</label>
+            <input asp-for="Documento" id="documentoFiltro" name="documento" class="form-control" placeholder="Digite CPF/CNPJ ">
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-right p-3">
+                @*<a asp-controller="Home" asp-action="Filtrar" class="btn btn-primary" id="btnFiltrar">Filtrar</a>*@
+                <button type="submit" name="TipoAcao" value="Filtrar" class="btn btn-primary">Filtrar</button>
+            </div>
+        </div>
+    </div>
+   
+    <div>
+        <h4>Listagem de CLientes</h4>
+    </div>
+    <div class="row" style="padding-top:20px">
+        <table width="100%" id="tabCotacoes">
+            <tr>
+                <td>TIPO (PJ/PF)</td>
+                <td>CNPJ/CPF</td>
+                <td>NOME</td>
+                <td>TELEFONE</td>
+                <td>DATA CADASTRO</td>
+                <td>AÇÕES</td>
+            </tr>
+            @if (Model.Clientes != null)
+            {
+                foreach (var item in Model.Clientes)
+                {
+                    <tr>
+                        <td>@item.Tipo</td>
+                        <td>@item.Documento</td>
+                        <td>@item.Nome</td>
+                        <td>@item.Telefone</td>
+                        <td>@item.DataCadastro.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            @Html.ActionLink("Editar", "Editar", "Home", new { ID = item.Id }, new { })
+                            <span>| </span>
+                            @Html.ActionLink("Excluir", "Deletar", "Home", new { ID = item.Id }, new { })
+                        </td>
+
+                    </tr>
+                }
+            }
+            else
+            {
+                <div style="text-align: center">
+                    <h3>NENHUMA CLIENTE ENCONTRADO</h3>
+                </div>
+
+            }
+        </table>
+    </div>
+   
+</form>
