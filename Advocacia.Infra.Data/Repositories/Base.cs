@@ -50,10 +50,10 @@ namespace Advocacia.Infra.Data.Repositories
             return await _contexto.Set<E>().ToListAsync();
         }
 
-        public async Task<List<Cliente>> BuscarPorNome(string nome)
+        public async Task<List<Cliente>> BuscarFiltro(string nome, string documento)
         {
             return await _contexto.Cliente.Where(x =>
-                string.IsNullOrEmpty(nome) || x.Nome.Contains(nome)
+                x.Nome.Contains(nome) || x.Documento.Contains(documento)
             )
             .OrderBy(x => x.Nome)
             .ToListAsync();

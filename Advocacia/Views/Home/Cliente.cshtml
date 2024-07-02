@@ -20,27 +20,28 @@
 
         <div class="row">
             <div class="col-md-12 text-right p-3">
-                @*<a asp-controller="Home" asp-action="Filtrar" class="btn btn-primary" id="btnFiltrar">Filtrar</a>*@
+                <a asp-controller="Home" asp-action="Cliente" class="btn btn-primary" id="btnLimpar">Limpar Filtro</a>
                 <button type="submit" name="TipoAcao" value="Filtrar" class="btn btn-primary">Filtrar</button>
             </div>
         </div>
     </div>
    
-    <div>
+    <div class="alt_des">
         <h4>Listagem de CLientes</h4>
     </div>
-    <div class="row" style="padding-top:20px">
-        <table width="100%" id="tabCotacoes">
-            <tr>
-                <td>TIPO (PJ/PF)</td>
-                <td>CNPJ/CPF</td>
-                <td>NOME</td>
-                <td>TELEFONE</td>
-                <td>DATA CADASTRO</td>
-                <td>AÇÕES</td>
-            </tr>
-            @if (Model.Clientes != null)
+    <div class="row alt_tab">
+        <table class="lar_tab" id="tabCliente">
+            
+            @if (Model.Clientes.Count() > 0)
             {
+                <tr>
+                    <td>TIPO (PJ/PF)</td>
+                    <td>CNPJ/CPF</td>
+                    <td>NOME</td>
+                    <td>TELEFONE</td>
+                    <td>DATA CADASTRO</td>
+                    <td>AÇÕES</td>
+                </tr>
                 foreach (var item in Model.Clientes)
                 {
                     <tr>

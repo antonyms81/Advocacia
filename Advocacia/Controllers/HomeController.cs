@@ -26,53 +26,72 @@ namespace Advocacia.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(Cliente cliente)
         {
-            string documento = Regex.Replace(cliente.Documento, "[^0-9]", "");
-            string telefone = Regex.Replace(cliente.Telefone, "[^0-9]", "");
-
-            cliente.Documento = documento;
-            cliente.Telefone = telefone;
-            cliente.DataCadastro = DateTime.Today;
-
-
-            if (Request.Form["TipoAcao"] == "Cadastrar")
+            try
             {
-                var linhasAfetadas = await _service.Criar(Guid.NewGuid(), cliente);
-                if (linhasAfetadas > 0)
+                string documento = Regex.Replace(cliente.Documento, "[^0-9]", "");
+                string telefone = Regex.Replace(cliente.Telefone, "[^0-9]", "");
+
+                cliente.Documento = documento;
+                cliente.Telefone = telefone;
+                cliente.DataCadastro = DateTime.Today;
+
+
+                if (Request.Form["TipoAcao"] == "Cadastrar")
                 {
-                    return RedirectToAction(nameof(Cliente));
+                    var linhasAfetadas = await _service.Criar(Guid.NewGuid(), cliente);
+                    if (linhasAfetadas > 0)
+                    {
+                        return RedirectToAction(nameof(Cliente));
+                    }
+
+
                 }
-
-
+                return View(cliente);
             }
-            return View(cliente);
+            catch (Exception ex)
+            {
+                return NotFound(ex);
+            }
+
         }
 
         public async Task<IActionResult> Cliente()
         {
-            ListaCliente listaCliente = new ListaCliente();
+            try
+            {
+                ListaCliente listaCliente = new ListaCliente();
 
-            var result = await _service.BuscarTodos();
+                var result = await _service.BuscarTodos();
 
-            listaCliente.Clientes = result;
+                listaCliente.Clientes = result;
 
-            return View(listaCliente);
+                return View(listaCliente);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex);
+            }
+          
         }
 
         [HttpPost]
         public async Task<IActionResult> Cliente(ListaCliente listaCliente)
         {
-            //var result = await _service.BuscarTodos();
-            //var listaFiltro = result.Where(f => f.Nome.Contains(listaCliente.Nome)).ToList();
-
-            //listaCliente.Clientes = listaFiltro;
-
-            string nome = listaCliente.Nome;
-
+            
             try
             {
-                var result = await _service.BuscarPorNome(nome);
+                string documento = listaCliente.Documento;
 
-                return View(result);
+                if (listaCliente.Documento != null)
+                {
+                    documento = Regex.Replace(listaCliente.Documento, "[^0-9]", "");
+                }
+
+                var result = await _service.BuscarFiltro(listaCliente.Nome, documento);
+
+                listaCliente.Clientes = result;
+
+                return View(listaCliente);
             }
             catch (Exception ex)
             {
@@ -84,66 +103,98 @@ namespace Advocacia.Controllers
 
         public async Task<IActionResult> Editar(Guid id)
         {
-            Cliente cliente = new Cliente();
-            if (id != Guid.Empty)
+            
+            try
             {
-                var _cliente = await _service.BuscarPorId(id);
-                
-                cliente = _cliente;
-              
+                Cliente cliente = new Cliente();
+
+                if (id != Guid.Empty)
+                {
+                    var _cliente = await _service.BuscarPorId(id);
+
+                    cliente = _cliente;
+
+                }
+                return View(cliente);
             }
-            return View(cliente);
+            catch (Exception ex)
+            {
+                return NotFound(ex);
+            }
         }
 
       
         [HttpPost]
         public async Task<IActionResult> Editar(Cliente cliente)
         {
-            string documento = Regex.Replace(cliente.Documento, "[^0-9]", "");
-            string telefone = Regex.Replace(cliente.Telefone, "[^0-9]", "");
-
-            cliente.Documento = documento;
-            cliente.Telefone = telefone;
-
-            if (Request.Form["TipoAcao"] == "Editar")
+            try
             {
-                var linhasAfetadas = await _service.Atualizar(cliente.Id, cliente);
+                string documento = Regex.Replace(cliente.Documento, "[^0-9]", "");
+                string telefone = Regex.Replace(cliente.Telefone, "[^0-9]", "");
+
+                cliente.Documento = documento;
+                cliente.Telefone = telefone;
+
+                if (Request.Form["TipoAcao"] == "Editar")
+                {
+                    var linhasAfetadas = await _service.Atualizar(cliente.Id, cliente);
+
+                    if (linhasAfetadas > 0)
+                    {
+                        return RedirectToAction(nameof(Cliente));
+                    }
+
+
+                }
+                return View(cliente);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex);
+            }
+          
+        }
+
+        public async Task<IActionResult> Deletar(Guid id)
+        {
+            try
+            {
+                if (id != Guid.Empty)
+                {
+                    var result = await _service.BuscarPorId(id);
+                    if (result != null)
+                    {
+                        return View(result);
+                    }
+                }
+                return View();
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex);
+            }
+           
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Deletar(Cliente cliente)
+        {
+            try
+            {
+                var linhasAfetadas = await _service.Excluir(cliente.Id);
 
                 if (linhasAfetadas > 0)
                 {
                     return RedirectToAction(nameof(Cliente));
                 }
 
-
+                return View();
             }
-            return View(cliente);
-        }
-
-        public async Task<IActionResult> Deletar(Guid id)
-        {
-            if (id != Guid.Empty)
+            catch (Exception ex)
             {
-                var result = await _service.BuscarPorId(id);
-                if (result != null)
-                {
-                    return View(result);
-                }
-            }
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Deletar(Cliente cliente)
-        {
-            
-            var linhasAfetadas = await _service.Excluir(cliente.Id);
-
-            if (linhasAfetadas > 0)
-            {
-                return RedirectToAction(nameof(Cliente));
+                return NotFound(ex);
             }
 
-            return View();
         }
 
 

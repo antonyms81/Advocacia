@@ -13,7 +13,7 @@ namespace Advocacia.Domain.Services
         Task<int> Excluir(Guid id);
         Task<int> Atualizar(Guid id, Cliente cotacao); 
         Task<List<Cliente>> BuscarTodos();
-        Task<List<Cliente>> BuscarPorNome(string nome);
+        Task<List<Cliente>> BuscarFiltro(string nome, string documento);
         Task<Cliente> BuscarPorId(Guid id);
        
 

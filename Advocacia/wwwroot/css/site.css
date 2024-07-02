@@ -16,3 +16,19 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.alt_tab{
+    padding-top:30px;
+}
+
+.alt_des {
+    padding-top: 20px;
+}
+
+.lar_tab {
+    width : 100%;
+}
+
+.conf_btn {
+    padding-top: 20px;
+}

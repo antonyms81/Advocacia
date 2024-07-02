@@ -13,23 +13,14 @@
     });
 
 
-    function aplicarMascara() {
-        $('#documentoFiltro').unmask(); // Remove qualquer máscara existente
-        var tamanho = $('#documentoFiltro').val().replace(/\D/g, '').length;
-        if (tamanho <= 11) {
-            $('#documentoFiltro').mask('000.000.000-00', { clearIfNotMatch: true });
-            $('#documentoFiltro').attr('placeholder', 'Digite o CPF');
-        } else {
-            $('#documentoFiltro').mask('00.000.000/0000-00', { clearIfNotMatch: true });
-            $('#documentoFiltro').attr('placeholder', 'Digite o CNPJ');
+    var options = {
+        onKeyPress: function (cpfcnpj, e, field, options) {
+            var masks = ['000.000.000-000', '00.000.000/0000-00'];
+            var mask = (cpfcnpj.length > 14) ? masks[1] : masks[0];
+            $('#documentoFiltro').mask(mask, options);
         }
-    }
-
-    // Aplica a máscara ao carregar a página
-    aplicarMascara();
-
-    // Aplica a máscara ao digitar no campo
-    $('#documentoFiltro').on('input', aplicarMascara);
+    };
+    $('#documentoFiltro').mask('000.000.000-00', options);
 
 
 });

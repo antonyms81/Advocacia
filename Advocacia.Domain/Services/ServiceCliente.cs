@@ -40,9 +40,9 @@ namespace Advocacia.Domain.Services
             return await _repositorio.BuscarTodos();
         }
 
-        public async Task<List<Cliente>> BuscarPorNome(string nome)
+        public async Task<List<Cliente>> BuscarFiltro(string nome, string documento)
         {
-            return await _repositorio.BuscarPorNome(nome);
+            return await _repositorio.BuscarFiltro(nome, documento);
         }
 
         public async Task<Cliente> BuscarPorId(Guid id)
